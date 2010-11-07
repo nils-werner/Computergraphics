@@ -1,6 +1,7 @@
 #include "shape2D/Line2D.h"
 #include "ui/Ui.h"
 #include <string.h>
+#include <math.h>
 
 /*
   implement in this function your normal version of the
@@ -47,6 +48,62 @@ void Line2D::bresenham(Image& image) const
  */
 void Line2D::antialiasedBresenham(Image& image) const
 {
+	//start position
+	int x1 = start.x, y1 = start.y;
+	int x2 = end.x, y2 = end.y;
+
+	int x = x1;
+	int y = y1;
+
+	int delta_x = x2 - x1;
+	int delta_y = y2 - y1;
+
+	int D = delta_x - 2*delta_y;
+	int D_E = -2*delta_y;
+	int D_NE = 2* (delta_x - delta_y);
+
+	while(x <= x2) {
+		image.setColor(x, y, Color(0,1,0));
+		x += 1;
+
+		float a = D / (2*delta_x);
+
+		if(D < 0) {
+			y = y+1;
+			D = D + D_NE;
+
+			//antialiasing
+			float intensity_1 = 1 - fabs(a-0.5);
+			float intensity_2 = fabs(a-0.5);			
+	
+			if(a < 0.5) {
+
+				image.setColor(x+1, y+1, intensity_1 * Color(0,1,0));
+				image.setColor(x+1, y, intensity_2 * Color(0,1,0));
+			} else {
+
+				image.setColor(x+1, y+1, intensity_1 * Color(0,1,0));
+				image.setColor(x+1, y+2, intensity_2 * Color(0,1,0));
+			}
+
+		} else {
+			D = D + D_E;
+
+			//antialiasing
+			float intensity_1 = 1 - fabs(a+0.5);
+			float intensity_2 = fabs(a+0.5);			
+	
+			if(a < -0.5) {
+
+				image.setColor(x+1, y, intensity_1 * Color(0,1,0));
+				image.setColor(x+1, y+1, intensity_2 * Color(0,1,0));
+			} else {
+
+				image.setColor(x+1, y, intensity_1 * Color(0,1,0));
+				image.setColor(x+1, y-1, intensity_2 * Color(0,1,0));
+			}
+		}
+	}
 }
 
 // Don't edit below this line
