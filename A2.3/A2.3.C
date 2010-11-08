@@ -55,40 +55,35 @@ void Line2D::antialiasedBresenham(Image& image) const
 	int D = 2*dy-dx;
 	int dD_E = 2*dy;
 	int dD_NE = 2*(dy-dx);
-	Color col_ = Color().stdGray; 
+	Color col_ = Color().white; 
 	while(x < end.x && x < image.sizeX() && y < image.sizeY()){
 		float a = D/(2*dx);
-		if(D <= 0){
-			float faktor = fabs(0-0.5);
+		x++;
+		if(D < 0){
+			D = D + dD_E;
+			float faktor = fabs(a + 0.5);
 			if(a > -0.5){
-				image.setColor(x+1, y, faktor * col_);
-				image.setColor(x+1,y+1,(1-faktor)*col_);
+				image.setColor(x+1, y, (1-faktor)* col_);
+				image.setColor(x+1,y+1,faktor*col_);
 			}
-			else if( a < -0.5){
-				image.setColor(x+1, y, col_);
-				image.setColor(x+1,y-1,col_);	
+			else{
+				image.setColor(x+1, y, (1-faktor)*col_);
+				image.setColor(x+1,y-1, faktor*col_);	
 			}
 		}
 		else{
-			float faktor = fabs(0 + 0.5);
-			if(a < 0.5){
-				image.setColor(x+1, y+1, col_);
-				image.setColor(x+1,y,col_);
-			}
-			else if( a > 0.5){
-				image.setColor(x+1, y+1, col_);
-				image.setColor(x+1,y+2,col_);	
-			}
-
-		}
-		//image.setColor (x, y, col_);
-		x++;
-		if(D > 0){	//NE
 			y++;
 			D = D + dD_NE;
-		}
-		else		//
-			D = D + dD_E;
+			float faktor = fabs(a - 0.5);
+			if(a < 0.5){
+				image.setColor(x+1, y+1, (1-faktor) *col_);
+				image.setColor(x+1,y,faktor*col_);
+			}
+			else{
+				image.setColor(x+1, y+1, (1-faktor) *col_);
+				image.setColor(x+1,y+2,faktor*col_);	
+			}
+		}			
 	}
 
 }
