@@ -93,7 +93,7 @@ void Line2D::antialiasedBresenham(Image& image) const
 			float intensity_1 = 1 - fabs(a+0.5);
 			float intensity_2 = fabs(a+0.5);			
 	
-			if(a < -0.5) {
+			if(a > -0.5) {
 
 				image.setColor(x+1, y, intensity_1 * Color(0,1,0));
 				image.setColor(x+1, y+1, intensity_2 * Color(0,1,0));
