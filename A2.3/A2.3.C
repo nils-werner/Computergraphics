@@ -1,8 +1,6 @@
 #include "shape2D/Line2D.h"
 #include "ui/Ui.h"
 #include <string.h>
-#include <math.h>
-
 /*
   implement in this function your normal version of the
   bresenham algorithm.
@@ -13,32 +11,31 @@
  */
 void Line2D::bresenham(Image& image) const
 {
+	const unsigned int dy = end.y - start.y;
+	const unsigned int dx = end.x - start.x;
+	int x0 = start.x;
+	int y0 = start.y;
 
-	//start position
-	int x1 = start.x, y1 = start.y;
-	int x2 = end.x, y2 = end.y;
-
-	int x = x1;
-	int y = y1;
-
-	int delta_x = x2 - x1;
-	int delta_y = y2 - y1;
-
-	int D = delta_x - 2*delta_y;
-	int D_E = -2*delta_y;
-	int D_NE = 2* (delta_x - delta_y);
-
-	while(x <= x2) {
-		image.setColor(x, y, Color(0,1,0));
-		x += 1;
-
-		if(D < 0) {
-			y = y+1;
-			D = D + D_NE;
-		} else {
-			D = D + D_E;
+	int x = x0;
+	int y = y0;
+	int D = 2*dy-dx;
+	int dD_E = 2*dy;
+	int dD_NE = 2*(dy-dx);
+	//cout << "start---------------"  << endl;
+	//cout  << "LINE:" << start << end << endl;
+	//cout  << "Image:" << image.sizeX() <<"\t"<< image.sizeY() << endl;
+	const Color col_ = Color().stdGray; 
+	while(x < end.x && x < image.sizeX() && y < image.sizeY()){
+		image.setColor (x, y, col_);
+		x++;
+		if(D > 0){	//NE
+			y++;
+			D = D + dD_NE;
 		}
-	}	
+		else		//E
+			D = D + dD_E;
+	}
+	//cout << "................finish" << endl;
 }
 
 
@@ -48,62 +45,52 @@ void Line2D::bresenham(Image& image) const
  */
 void Line2D::antialiasedBresenham(Image& image) const
 {
-	//start position
-	int x1 = start.x, y1 = start.y;
-	int x2 = end.x, y2 = end.y;
+	const unsigned int dy = end.y - start.y;
+	const unsigned int dx = end.x - start.x;
+	int x0 = start.x;
+	int y0 = start.y;
 
-	int x = x1;
-	int y = y1;
-
-	int delta_x = x2 - x1;
-	int delta_y = y2 - y1;
-
-	int D = delta_x - 2*delta_y;
-	int D_E = -2*delta_y;
-	int D_NE = 2* (delta_x - delta_y);
-
-	while(x <= x2) {
-		image.setColor(x, y, Color(0,1,0));
-		x += 1;
-
-		float a = D / (2*delta_x);
-
-		if(D < 0) {
-			y = y+1;
-			D = D + D_NE;
-
-			//antialiasing
-			float intensity_1 = 1 - fabs(a-0.5);
-			float intensity_2 = fabs(a-0.5);			
-	
-			if(a < 0.5) {
-
-				image.setColor(x+1, y+1, intensity_1 * Color(0,1,0));
-				image.setColor(x+1, y, intensity_2 * Color(0,1,0));
-			} else {
-
-				image.setColor(x+1, y+1, intensity_1 * Color(0,1,0));
-				image.setColor(x+1, y+2, intensity_2 * Color(0,1,0));
+	int x = x0;
+	int y = y0;
+	int D = 2*dy-dx;
+	int dD_E = 2*dy;
+	int dD_NE = 2*(dy-dx);
+	Color col_ = Color().stdGray; 
+	while(x < end.x && x < image.sizeX() && y < image.sizeY()){
+		float a = D/(2*dx);
+		if(D <= 0){
+			float faktor = fabs(0-0.5);
+			if(a > -0.5){
+				image.setColor(x+1, y, faktor * col_);
+				image.setColor(x+1,y+1,(1-faktor)*col_);
 			}
-
-		} else {
-			D = D + D_E;
-
-			//antialiasing
-			float intensity_1 = 1 - fabs(a+0.5);
-			float intensity_2 = fabs(a+0.5);			
-	
-			if(a < -0.5) {
-
-				image.setColor(x+1, y, intensity_1 * Color(0,1,0));
-				image.setColor(x+1, y+1, intensity_2 * Color(0,1,0));
-			} else {
-
-				image.setColor(x+1, y, intensity_1 * Color(0,1,0));
-				image.setColor(x+1, y-1, intensity_2 * Color(0,1,0));
+			else if( a < -0.5){
+				image.setColor(x+1, y, col_);
+				image.setColor(x+1,y-1,col_);	
 			}
 		}
+		else{
+			float faktor = fabs(0 + 0.5);
+			if(a < 0.5){
+				image.setColor(x+1, y+1, col_);
+				image.setColor(x+1,y,col_);
+			}
+			else if( a > 0.5){
+				image.setColor(x+1, y+1, col_);
+				image.setColor(x+1,y+2,col_);	
+			}
+
+		}
+		//image.setColor (x, y, col_);
+		x++;
+		if(D > 0){	//NE
+			y++;
+			D = D + dD_NE;
+		}
+		else		//
+			D = D + dD_E;
 	}
+
 }
 
 // Don't edit below this line
