@@ -1,3 +1,11 @@
+/*
+Computergraphics WS2010
+
+Volker Breuer - 21263916
+Nils Werner - 
+Felix Gundlack - 
+*/
+
 #include "shape2D/Line2D.h"
 #include "base/Matrix3x3.h"
 #include "ui/Ui.h"
@@ -10,12 +18,29 @@
 // Using the push-button, you can switch between the display of the clipped
 // and the original lines.
 
-// Compute the window edge coordinates and return them in the variable wecs.
-// Also compute the outcodes and return them as bitflags.
-// You can make use of the enum type defined in ClipRect:
-// TOP_FLAG, BOTTOM_FLAG, RIGHT_FLAG and LEFT_FLAG
+//Compute the window edge coordinates and outcode for a given point (v?).
+// Compute the window edge coordinates and return them in the variable wecs. 
+// Also compute the outcodes and return them as bitflags. 
+//You can make use of the enum type defined in ClipRect:
+// TOP_FLAG, BOTTOM_FLAG, RIGHT_FLAG and LEFT_FLAG		||		WEC = Window Edge Coordinates
 int ClipRect::wec(const Vector2D& v, float wecs[4]) const
 {
+	//x,y values describing the clip rectangle
+	double x_min = minCorner.x;
+	double y_min = minCorner.y;
+	double x_max = maxCorner.x;
+	double y_max = maxCorner.y;
+
+	//calculating wec for given point
+	wecs[0] = v.x - x_min;		//WEC_left
+	wecs[1] = x_max - v.x;		//WEC_right
+	wecs[2] = y_max - v.y;		//WEC_top
+	wecs[3] = v.y - y_min;		//WEC_bottom
+
+	//compute outcodes
+	int outcodes = 0x0;
+	outcodes = (v.x < x_min) | (v.x > x_max) | (v.y < y_min) | (v.y > y_max);
+	return outcodes;
 }
 
 
@@ -24,6 +49,58 @@ int ClipRect::wec(const Vector2D& v, float wecs[4]) const
 void Line2D::clipOutside(const ClipRect& clipRect, 
                          vector<Line2D>& clippedLines) const
 {
+	//describes the positions in the wec-array
+	int edge[] = {clipRect.LEFT_FLAG, clipRect.RIGHT_FLAG, clipRect.TOP_FLAG, clipRect.BOTTOM_FLAG};
+
+	//windows edge coordinates and outcodes
+	float wecs_start[4];
+	float wecs_end[4];
+	int outcode_start;
+	int outcode_end;
+
+	//compute wec and outcode of start- and endpoint
+	outcode_start = clipRect.wec(start, wecs_start);
+	outcode_end = clipRect.wec(end, wecs_end);
+
+	//cout << "outCodes: " << outcode_start << " " << outcode_end << endl;
+
+	//trivial reject: start and endpoint inside
+	if ((outcode_start == 0) && (outcode_end == 0)) {
+		//line completely inside rectangle -> won't get drawn
+		return;
+	}
+/*	//trivial accept: start and endpoint outside
+	if((outcode_start != 0) && (outcode_end != 0)) {
+		//clippedLines.push_back(Line2D(start, end, color, false));
+		return;
+	}
+*/
+	//for each edge...
+
+	double alpha_min = 0, alpha_max = 1;
+	
+	int i;
+	for(i = 0; i < 4; i++) {
+
+		//Point 'start':
+		if(edge[i] == (edge[i] & outcode_start)) {
+
+			double alpha = wecs_start[i] / (wecs_start[i] - wecs_end[i]);
+			alpha_min = (alpha > alpha_min) ? alpha : alpha_min;
+		}
+
+		//Point 'end':
+		if(edge[i] == (edge[i] & outcode_end)) {
+			double alpha = wecs_start[i] / (wecs_start[i] - wecs_end[i]);
+			alpha_max = (alpha < alpha_max) ? alpha : alpha_max;
+		}
+	}
+
+	if(alpha_min < alpha_max) {
+		Vector2D newStart = start + alpha_min * (end - start);
+		Vector2D newEnd = end + alpha_max * (end - start);
+		clippedLines.push_back(Line2D(newStart, newEnd, color, false));
+	}
 }
 
 // Don't edit below this line
