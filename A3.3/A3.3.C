@@ -81,11 +81,18 @@ void Line2D::clipOutside(const ClipRect& clipRect,
 	cout << "wecs_end: " << wecs_end[2] << endl;
 	cout << "wecs_end: " << wecs_end[3] << endl;
 
-	//trivial reject: start and endpoint inside
-	if ((outcode_start == 0) && (outcode_end == 0)) {
-		//line completely inside rectangle -> won't get drawn
+	//trivial reject: line completely inside rectangle
+	if ((outcode_start | outcode_end) == 0) {
 		return;
 	}
+
+	//trivial accept: line completely outside rectangle
+	if ((outcode_start & outcode_end) != 0) {
+		clippedLines.push_back(Line2D(start, end, color, false));
+		return;
+	}
+
+	//the ABOVE actually seems to work .. but to following doesn't do what it should
 
 	//for each edge...
 	double alpha_min = 0, alpha_max = 1;
