@@ -72,15 +72,6 @@ void Line2D::clipOutside(const ClipRect& clipRect,
 	clipRect.displayOutcode(outcode_end);
 	cout << "-------------------" << endl;	
 
-	cout << "wecs_start: " << wecs_start[0] << endl;
-	cout << "wecs_start: " << wecs_start[1] << endl;
-	cout << "wecs_start: " << wecs_start[2] << endl;
-	cout << "wecs_start: " << wecs_start[3] << endl;
-	cout << "wecs_end: " << wecs_end[0] << endl;
-	cout << "wecs_end: " << wecs_end[1] << endl;
-	cout << "wecs_end: " << wecs_end[2] << endl;
-	cout << "wecs_end: " << wecs_end[3] << endl;
-
 	//trivial reject: line completely inside rectangle
 	if ((outcode_start | outcode_end) == 0) {
 		return;
@@ -92,34 +83,27 @@ void Line2D::clipOutside(const ClipRect& clipRect,
 		return;
 	}
 
-	//the ABOVE actually seems to work .. but to following doesn't do what it should
-
 	//for each edge...
-	double alpha_min = 0, alpha_max = 1;
-	
 	int i;
 	for(i = 0; i < 4; i++) {
 
-		//Point 'start':
+		//Point 'start': is on the outside
 		if(edge[i] & outcode_start) {
 
 			double alpha = wecs_start[i] / (wecs_start[i] - wecs_end[i]);
-			alpha_min = (alpha > alpha_min) ? alpha : alpha_min;
+	
+			Vector2D newEnd = start + alpha * (end - start);
+			clippedLines.push_back(Line2D(start, newEnd, color, false));
 		}
 
-		//Point 'end':
+		//Point 'end': is on the outside
 		if(edge[i] & outcode_end) {
+
 			double alpha = wecs_start[i] / (wecs_start[i] - wecs_end[i]);
-			alpha_max = (alpha < alpha_max) ? alpha : alpha_max;
+
+			Vector2D newEnd = start + alpha * (end - start);
+			clippedLines.push_back(Line2D(end, newEnd, color, false));
 		}
-	}
-
-	cout << "Alpha_Min: " << alpha_min << "; \tAlpha_Max: " << alpha_max << endl;
-
-	if(alpha_min < alpha_max) {
-		Vector2D newStart = start + alpha_min * (end - start);
-		Vector2D newEnd = end + alpha_max * (end - start);
-		clippedLines.push_back(Line2D(newStart, newEnd, color, false));
 	}
 }
 
