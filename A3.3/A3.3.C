@@ -34,15 +34,15 @@ int ClipRect::wec(const Vector2D& v, float wecs[4]) const
 	//calculating wec for given point
 	wecs[0] = v.x - x_min;		//WEC_left
 	wecs[1] = x_max - v.x;		//WEC_right
-	wecs[2] = y_max - v.y;		//WEC_top
-	wecs[3] = v.y - y_min;		//WEC_bottom
+	wecs[3] = y_max - v.y;		//WEC_top			//TOP / Bottom exchanged because of top left coord of screen ist 0,0
+	wecs[2] = v.y - y_min;		//WEC_bottom
 
 	//compute outcodes
 	int outcodes = 0x0;
-	outcodes = (v.x < x_min) | (v.x > x_max) | (v.y < y_min) | (v.y > y_max);
+	outcodes = ((v.x < x_min) * LEFT_FLAG) | ((v.x > x_max) * RIGHT_FLAG) | ((v.y < y_min) * TOP_FLAG) | ((v.y > y_max) * BOTTOM_FLAG);
+
 	return outcodes;
 }
-
 
 // Clip the line against the outside of the clip rectangle. The resulting line-
 // segment(s) should be added to the vector of clipped lines.
@@ -62,39 +62,52 @@ void Line2D::clipOutside(const ClipRect& clipRect,
 	outcode_start = clipRect.wec(start, wecs_start);
 	outcode_end = clipRect.wec(end, wecs_end);
 
-	//cout << "outCodes: " << outcode_start << " " << outcode_end << endl;
+	//debug information
+	cout << "-------------------" << endl
+		<< "outCodes: start = " << outcode_start 
+		<< " stop = " << outcode_end << endl
+		<< "start = ";
+	clipRect.displayOutcode(outcode_start);
+	cout << "stop = ";
+	clipRect.displayOutcode(outcode_end);
+	cout << "-------------------" << endl;	
+
+	cout << "wecs_start: " << wecs_start[0] << endl;
+	cout << "wecs_start: " << wecs_start[1] << endl;
+	cout << "wecs_start: " << wecs_start[2] << endl;
+	cout << "wecs_start: " << wecs_start[3] << endl;
+	cout << "wecs_end: " << wecs_end[0] << endl;
+	cout << "wecs_end: " << wecs_end[1] << endl;
+	cout << "wecs_end: " << wecs_end[2] << endl;
+	cout << "wecs_end: " << wecs_end[3] << endl;
 
 	//trivial reject: start and endpoint inside
 	if ((outcode_start == 0) && (outcode_end == 0)) {
 		//line completely inside rectangle -> won't get drawn
 		return;
 	}
-/*	//trivial accept: start and endpoint outside
-	if((outcode_start != 0) && (outcode_end != 0)) {
-		//clippedLines.push_back(Line2D(start, end, color, false));
-		return;
-	}
-*/
-	//for each edge...
 
+	//for each edge...
 	double alpha_min = 0, alpha_max = 1;
 	
 	int i;
 	for(i = 0; i < 4; i++) {
 
 		//Point 'start':
-		if(edge[i] == (edge[i] & outcode_start)) {
+		if(edge[i] & outcode_start) {
 
 			double alpha = wecs_start[i] / (wecs_start[i] - wecs_end[i]);
 			alpha_min = (alpha > alpha_min) ? alpha : alpha_min;
 		}
 
 		//Point 'end':
-		if(edge[i] == (edge[i] & outcode_end)) {
+		if(edge[i] & outcode_end) {
 			double alpha = wecs_start[i] / (wecs_start[i] - wecs_end[i]);
 			alpha_max = (alpha < alpha_max) ? alpha : alpha_max;
 		}
 	}
+
+	cout << "Alpha_Min: " << alpha_min << "; \tAlpha_Max: " << alpha_max << endl;
 
 	if(alpha_min < alpha_max) {
 		Vector2D newStart = start + alpha_min * (end - start);
