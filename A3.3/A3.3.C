@@ -2,8 +2,8 @@
 Computergraphics WS2010
 
 Volker Breuer - 21263916
-Nils Werner - 
-Felix Gundlack - 
+Nils Werner - 21202217
+Felix Gundlack - 21309819
 */
 
 #include "shape2D/Line2D.h"
