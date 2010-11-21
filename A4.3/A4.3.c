@@ -85,7 +85,7 @@ void earth()
 void moon() 
 {
 	glPushMatrix();
-	glRotatef(0.0, 0.0, 0.0, 1.0);
+	glRotatef(-45.0, 0.0, 0.0, 1.0);
 	glTranslatef(0.6, 0.0, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
