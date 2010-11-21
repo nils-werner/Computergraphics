@@ -9,6 +9,8 @@ Felix Gundlack - 21309819
 #include <GL/glut.h>
 #include <math.h>
 
+#define SPHERE_SEGMENTS 25
+
 void init_openGL() 
 {
 	glClearColor(1.0, 1.0, 1.0, 0.0);
@@ -31,24 +33,24 @@ void orbit(int radius, float center_x, float center_y) {
 
 void sun() {
 	glColor3f(1.0, 1.0, 0.0);
-	glutSolidSphere(1.3, 25, 25);
+	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 }
 
 void earth() {
 	glColor3f(0.0, 0.0, 1.0);
-	glutSolidSphere(1.3, 25, 25);
+	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 
 	orbit(0.6, 0.0, 0.0);
 }
 
 void moon() {
 	glColor3f(0.5, 0.5, 0.5);
-	glutSolidSphere(1.3, 25, 25);
+	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 }
 
 void mars() {
 	glColor3f(1.0, 0.0, 0.0);
-	glutSolidSphere(1.3, 25, 25);
+	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 
 	orbit(0.3, 0.0, 0.0);
 }
