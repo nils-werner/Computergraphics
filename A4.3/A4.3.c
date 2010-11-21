@@ -25,7 +25,7 @@ void init_openGL()
 	gluLookAt(0.0, 0.0, 4.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
 }
 
-void orbit(int radius, float center_x, float center_y) 
+void orbit(float radius, float center_x, float center_y) 
 {
 	float phi_step = (float) (2 * PI / SPHERE_SEGMENTS);
 
