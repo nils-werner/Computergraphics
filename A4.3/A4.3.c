@@ -31,6 +31,8 @@ void sun() {
 	glFlush();
 }
 
+void orbit(int radius, float pos_x, float pos_y) {}
+
 void earth() {}
 
 void moon() {}
