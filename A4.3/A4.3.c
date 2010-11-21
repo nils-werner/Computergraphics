@@ -10,7 +10,7 @@ Felix Gundlack - 21309819
 #include <math.h>
 
 #define PI 3.1415926
-#define SPHERE_SEGMENTS 25
+#define SPHERE_SEGMENTS 35
 
 void init_openGL() 
 {
@@ -29,8 +29,8 @@ void orbit(int radius, float center_x, float center_y)
 {
 	float phi_step = (float) (2 * PI / SPHERE_SEGMENTS);
 
+	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	//glLoadIdentity();	
 	glTranslatef(center_x, center_y, 0.0);
 	glColor3f(1.0, 1.0, 1.0);
 	
@@ -41,8 +41,8 @@ void orbit(int radius, float center_x, float center_y)
 		int i;
 		for(i = 1; i <= SPHERE_SEGMENTS; i++) {
 
-			float x = cos(phi_step*i);
-			float y = sin(phi_step*i);
+			float x = cos(phi_step*i) * radius;
+			float y = sin(phi_step*i) * radius;
 
 			glVertex3f(x, y, 0.0);
 		}
