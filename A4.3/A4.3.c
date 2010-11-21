@@ -13,7 +13,7 @@ Felix Gundlack - 21309819
 
 void init_openGL() 
 {
-	glClearColor(1.0, 1.0, 1.0, 0.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
