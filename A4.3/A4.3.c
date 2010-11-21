@@ -10,9 +10,11 @@ Felix Gundlack - 21309819
 #include <math.h>
 
 void init_openGL() 
-
 {
 	glClearColor(1.0, 1.0, 1.0, 0.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -25,8 +27,10 @@ void init_openGL()
 
 void display()
 {
-/*
-	glBegin(GL_LINES);
+	glColor3f(0.5, 0.5, 0.5);
+	glBegin(GL_LINE_STRIP);
+
+	glVertex3f(0.0, 0.0, 0.0);
 
 	int i;
 	for(i = 1; i < 20; i++) {
@@ -39,13 +43,14 @@ void display()
 		glVertex3f(x, y, 0.0);
 	}
 
-
 	glEnd();
+	glFlush();
 
-*/
+/*
 	glColor3f(1.0, 1.0, 0.0);
 	glutSolidSphere(1.3, 25, 25);
 	glFlush();
+*/
 }
 
 int main(int argc, char **argv)
