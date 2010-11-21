@@ -21,7 +21,7 @@ void init_openGL()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 2.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	gluLookAt(0.0, 0.0, 4.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
 }
 
 void orbit(int radius, float center_x, float center_y) 
@@ -35,18 +35,18 @@ void orbit(int radius, float center_x, float center_y)
 	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 
-	glVertex3f(radius, 0.0, 0.0);
+	glVertex3f(radius+center_x, center_y, 0.0);
 
 	int i;
-	for(i = 1; i <= 20; i++) {
+	for(i = 1; i <= STEPSIZE; i++) {
 
-		float x = cos(phi_step*i);
-		float y = sin(phi_step*i);
+		float x = cos(phi_step*i) + center_x;
+		float y = sin(phi_step*i) + center_y;
 
 		glVertex3f(x, y, 0.0);
 	}
 
-	glVertex3f(radius, 0.0, 0.0);
+	glVertex3f(radius+center_x, center_y, 0.0);
 
 	glEnd();
 	glPopMatrix();
@@ -107,7 +107,7 @@ void display()
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitWindowSize(512, 512);
+	glutInitWindowSize(600, 600);
 	glutCreateWindow("A4.3 - Planeten");
 	glutDisplayFunc(display);
 
