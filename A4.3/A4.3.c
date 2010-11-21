@@ -60,9 +60,12 @@ void sun()
 void earth() 
 {
 	glPushMatrix();
-	glTranslatef(1.8, 1.0, 0.0); // temporäre werte
+	glTranslatef(1.8, 0.0, 0.0); // radius
+	glRotatef(45.0, 0.0, 0.0, 0.0);  // rotation
+
 	glColor3f(0.0, 0.0, 1.0);
 	glutSolidSphere(0.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+
 	glPopMatrix();
 
 	orbit(1.8, 0.0, 0.0);
@@ -71,7 +74,11 @@ void earth()
 void moon() 
 {
 	glPushMatrix();
-	glTranslatef(1.8, 0.4, 0.0); // temporäre werte
+
+	glTranslatef(1.8, 0.0, 0.0); // radius
+	glRotatef(45.0, 0.0, 0.0, 0.0);  // rotation
+	glTranslatef(0.6, 0.0, 0.0); // radius zur erde
+
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 	glPopMatrix();
@@ -80,7 +87,10 @@ void moon()
 void mars() 
 {
 	glPushMatrix();
-	glTranslatef(1.0, -1.0, 0.0); // temporäre werte
+
+	glTranslatef(3.0, 0.0, 0.0); // radius
+	glRotatef(-30.0, 0.0, 0.0, 0.0);  // rotation
+
 	glColor3f(1.0, 0.0, 0.0);
 	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 	glPopMatrix();
