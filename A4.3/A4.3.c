@@ -25,6 +25,18 @@ void init_openGL()
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
 }
 
+void sun() {
+	glColor3f(1.0, 1.0, 0.0);
+	glutSolidSphere(1.3, 25, 25);
+	glFlush();
+}
+
+void earth() {}
+
+void moon() {}
+
+void mars() {}
+
 void display()
 {
 	glColor3f(0.5, 0.5, 0.5);
@@ -46,11 +58,11 @@ void display()
 	glEnd();
 	glFlush();
 
-/*
-	glColor3f(1.0, 1.0, 0.0);
-	glutSolidSphere(1.3, 25, 25);
-	glFlush();
-*/
+
+	sun();
+	earth();
+	moon();
+	mars();
 }
 
 int main(int argc, char **argv)
