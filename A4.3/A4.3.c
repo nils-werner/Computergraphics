@@ -30,6 +30,8 @@ void orbit(int radius, float center_x, float center_y)
 	int STEPSIZE = 30;
 	int phi_step = (float) (2 * pi / STEPSIZE);
 
+	glPushMatrix();
+	glTranslatef(center_x, center_y, 0.0);
 	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 
@@ -44,8 +46,9 @@ void orbit(int radius, float center_x, float center_y)
 		glVertex3f(x, y, 0.0);
 	}
 
+
 	glEnd();
-	glFlush();
+	glPopMatrix();
 }
 
 void sun() 
@@ -56,22 +59,31 @@ void sun()
 
 void earth() 
 {
+	glPushMatrix();
+	glTranslatef(1.8, 1.0, 0.0); // temporäre werte
 	glColor3f(0.0, 0.0, 1.0);
 	glutSolidSphere(0.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	glPopMatrix();
 
 	orbit(1.8, 0.0, 0.0);
 }
 
 void moon() 
 {
+	glPushMatrix();
+	glTranslatef(1.8, 0.4, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	glPopMatrix();
 }
 
 void mars() 
 {
+	glPushMatrix();
+	glTranslatef(1.0, -1.0, 0.0); // temporäre werte
 	glColor3f(1.0, 0.0, 0.0);
 	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	glPopMatrix();
 
 	orbit(3.0, 0.0, 0.0);
 }
