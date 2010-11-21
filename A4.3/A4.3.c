@@ -9,6 +9,7 @@ Felix Gundlack - 21309819
 #include <GL/glut.h>
 #include <math.h>
 
+#define PI 3.1415926
 #define SPHERE_SEGMENTS 25
 
 void init_openGL() 
@@ -26,28 +27,28 @@ void init_openGL()
 
 void orbit(int radius, float center_x, float center_y) 
 {
-	float pi = 3.1415926;
-	int STEPSIZE = 30;
-	float phi_step = (float) (2 * pi / STEPSIZE);
+	float phi_step = (float) (2 * PI / SPHERE_SEGMENTS);
 
 	glPushMatrix();
+	//glLoadIdentity();	
 	glTranslatef(center_x, center_y, 0.0);
 	glColor3f(1.0, 1.0, 1.0);
+	
 	glBegin(GL_LINE_LOOP);
+	{
+		glVertex3f(radius, 0.0, 0.0);
 
-	glVertex3f(radius+center_x, center_y, 0.0);
+		int i;
+		for(i = 1; i <= SPHERE_SEGMENTS; i++) {
 
-	int i;
-	for(i = 1; i <= STEPSIZE; i++) {
+			float x = cos(phi_step*i);
+			float y = sin(phi_step*i);
 
-		float x = cos(phi_step*i) + center_x;
-		float y = sin(phi_step*i) + center_y;
+			glVertex3f(x, y, 0.0);
+		}
 
-		glVertex3f(x, y, 0.0);
+		glVertex3f(radius, 0.0, 0.0);
 	}
-
-	glVertex3f(radius+center_x, center_y, 0.0);
-
 	glEnd();
 	glPopMatrix();
 }
@@ -66,7 +67,7 @@ void earth()
 	glutSolidSphere(0.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 	glPopMatrix();
 
-	orbit(1.8, 0.0, 0.0);
+	orbit(1.8, 1.0, 0.0);
 }
 
 void moon() 
@@ -86,15 +87,13 @@ void mars()
 	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 	glPopMatrix();
 
-	orbit(3.0, 0.0, 0.0);
+	orbit(3.0, -1.0, 0.0);
 }
 
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-
-
 
 	sun();
 	earth();
