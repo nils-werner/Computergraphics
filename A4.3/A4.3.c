@@ -14,41 +14,62 @@ Felix Gundlack - 21309819
 void init_openGL() 
 {
 	glClearColor(1.0, 1.0, 1.0, 0.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
 
-	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 5.0);
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	gluLookAt(2.0, 2.0, 2.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
 }
 
-void orbit(int radius, float center_x, float center_y) {
+void orbit(int radius, float center_x, float center_y) 
+{
+	float pi = 3.1415926;
+	int STEPSIZE = 30;
+	int phi_step = (float) (2 * pi / STEPSIZE);
+
 	glColor3f(1.0, 1.0, 1.0);
+	glBegin(GL_LINE_LOOP);
+
+	glVertex3f(0.0, 0.0, 0.0);
+
+	int i;
+	for(i = 1; i < 20; i++) {
+
+		float x = cos(phi_step*i);
+		float y = sin(phi_step*i);
+
+		glVertex3f(x, y, 0.0);
+	}
+
+	glEnd();
+	glFlush();
 }
 
-void sun() {
+void sun() 
+{
 	glColor3f(1.0, 1.0, 0.0);
 	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 }
 
-void earth() {
+void earth() 
+{
 	glColor3f(0.0, 0.0, 1.0);
 	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 
 	orbit(0.6, 0.0, 0.0);
 }
 
-void moon() {
+void moon() 
+{
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 }
 
-void mars() {
+void mars() 
+{
 	glColor3f(1.0, 0.0, 0.0);
 	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 
@@ -57,24 +78,9 @@ void mars() {
 
 void display()
 {
-	glColor3f(0.5, 0.5, 0.5);
-	glBegin(GL_LINE_STRIP);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
 
-	glVertex3f(0.0, 0.0, 0.0);
-
-	int i;
-	for(i = 1; i < 20; i++) {
-
-		float degree = 360.0 / i;
-
-		float x = cos(degree);
-		float y = sin(degree);
-
-		glVertex3f(x, y, 0.0);
-	}
-
-	glEnd();
-	glFlush();
 
 
 	sun();
