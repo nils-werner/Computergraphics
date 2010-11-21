@@ -51,29 +51,29 @@ void orbit(int radius, float center_x, float center_y)
 void sun() 
 {
 	glColor3f(1.0, 1.0, 0.0);
-	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	glutSolidSphere(0.8, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 }
 
 void earth() 
 {
 	glColor3f(0.0, 0.0, 1.0);
-	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	glutSolidSphere(0.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 
-	orbit(0.6, 0.0, 0.0);
+	orbit(1.8, 0.0, 0.0);
 }
 
 void moon() 
 {
 	glColor3f(0.5, 0.5, 0.5);
-	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 }
 
 void mars() 
 {
 	glColor3f(1.0, 0.0, 0.0);
-	glutSolidSphere(1.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 
-	orbit(0.3, 0.0, 0.0);
+	orbit(3.0, 0.0, 0.0);
 }
 
 void display()
