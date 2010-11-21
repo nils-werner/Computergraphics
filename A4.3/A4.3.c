@@ -77,6 +77,8 @@ void moon()
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 	glPopMatrix();
+	
+	orbit(0.4, 1.8, 0.0);
 }
 
 void mars() 
