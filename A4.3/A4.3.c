@@ -12,6 +12,8 @@ Felix Gundlack - 21309819
 #define PI 3.1415926
 #define SPHERE_SEGMENTS 35
 
+void moon();
+
 void init_openGL() 
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -62,28 +64,34 @@ void sun()
 void earth() 
 {
 	glPushMatrix();
+	glRotatef(45.0, 0.0, 0.0, 1.0);
 	glTranslatef(1.8, 0.0, 0.0); // temporäre werte
 	glColor3f(0.0, 0.0, 1.0);
 	glutSolidSphere(0.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+
+	moon();
+		
 	glPopMatrix();
 
-	orbit(1.8, 0.0, 0.0);
+	orbit(1.8, 0.0, 0.0);		
 }
 
 void moon() 
 {
 	glPushMatrix();
-	glTranslatef(1.8, 0.4, 0.0); // temporäre werte
+	glRotatef(0.0, 0.0, 0.0, 1.0);
+	glTranslatef(0.6, 0.0, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
 	glPopMatrix();
 	
-	orbit(0.4, 1.8, 0.0);
+	orbit(0.6, 0.0, 0.0);
 }
 
 void mars() 
 {
 	glPushMatrix();
+	glRotatef(-30.0, 0.0, 0.0, 1.0);
 	glTranslatef(3.0, 0.0, 0.0); // temporäre werte
 	glColor3f(1.0, 0.0, 0.0);
 	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
@@ -99,7 +107,6 @@ void display()
 
 	sun();
 	earth();
-	moon();
 	mars();
 
 	glFlush();
