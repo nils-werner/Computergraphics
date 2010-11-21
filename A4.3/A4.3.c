@@ -22,11 +22,12 @@ void init_openGL()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
+//	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
+	glOrtho(-5.0, 5.0, -5.0, 5.0, 0.01, 50.0);	
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 4.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	gluLookAt(0.0, 0.0, 20.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
 }
 
 void orbit(float radius, float center_x, float center_y) 
