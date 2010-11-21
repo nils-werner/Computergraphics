@@ -13,6 +13,8 @@ Felix Gundlack - 21309819
 #define SPHERE_SEGMENTS 35
 
 void moon();
+void earth();
+void mars();
 
 void init_openGL() 
 {
@@ -59,6 +61,9 @@ void sun()
 {
 	glColor3f(1.0, 1.0, 0.0);
 	glutSolidSphere(0.8, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+
+	earth();
+	mars();
 }
 
 void earth() 
@@ -106,8 +111,6 @@ void display()
 	glEnable(GL_DEPTH_TEST);
 
 	sun();
-	earth();
-	mars();
 
 	glFlush();
 }
