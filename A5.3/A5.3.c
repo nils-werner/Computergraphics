@@ -20,6 +20,7 @@ void mars();
 float time = 0;
 float speed = 0;
 bool rotate = 1;
+bool circles = 0;
 
 void init_openGL() 
 {
@@ -63,10 +64,22 @@ void orbit(float radius, float center_x, float center_y)
 	glPopMatrix();
 }
 
+void planet(float radius)
+{
+	if(circles == 1)
+	{
+		glutSolidSphere(radius, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	}
+	else
+	{
+		glutSolidCube(radius*2);
+	}
+}
+
 void sun() 
 {
 	glColor3f(1.0, 1.0, 0.0);
-	glutSolidSphere(0.8, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	planet(0.8);
 
 	earth();
 	mars();
@@ -79,7 +92,7 @@ void earth()
 	glRotatef(time, 0.0, 0.0, 1.0);
 	glTranslatef(1.8, 0.0, 0.0); // temporäre werte
 	glColor3f(0.0, 0.0, 1.0);
-	glutSolidSphere(0.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	planet(0.3);
 
 	moon();
 		
@@ -95,7 +108,7 @@ void moon()
 	glRotatef(2*time, 0.0, 0.0, 1.0);
 	glTranslatef(0.6, 0.0, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
-	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	planet(0.1);
 	glPopMatrix();
 	
 	orbit(0.6, 0.0, 0.0);
@@ -108,7 +121,7 @@ void mars()
 	glRotatef(0.5*time, 0.0, 0.0, 1.0);
 	glTranslatef(3.0, 0.0, 0.0); // temporäre werte
 	glColor3f(1.0, 0.0, 0.0);
-	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
+	planet(0.2);
 	glPopMatrix();
 
 	orbit(3.0, 0.0, 0.0);
@@ -132,6 +145,7 @@ void idle()
 		if(time > 360*2) // mars bewegt sich halb so schnell wie $time
 			time = 0;
 	}
+
 	glutPostRedisplay();
 }
 
