@@ -90,7 +90,7 @@ void moon()
 {
 	glPushMatrix();
 	//glRotatef(-45.0, 0.0, 0.0, 1.0);
-	glRotatef(time, 0.0, 0.0, 1.0);
+	glRotatef(2*time, 0.0, 0.0, 1.0);
 	glTranslatef(0.6, 0.0, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
@@ -103,7 +103,7 @@ void mars()
 {
 	glPushMatrix();
 	//glRotatef(-30.0, 0.0, 0.0, 1.0);
-	glRotatef(time, 0.0, 0.0, 1.0);
+	glRotatef(0.5*time, 0.0, 0.0, 1.0);
 	glTranslatef(3.0, 0.0, 0.0); // temporäre werte
 	glColor3f(1.0, 0.0, 0.0);
 	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
@@ -126,7 +126,7 @@ void idle()
 {
 	if(rotate == 1)
 	{
-		time += 0.1;
+		time += 0.3;
 		if(time > 360)
 			time = 0;
 	}
