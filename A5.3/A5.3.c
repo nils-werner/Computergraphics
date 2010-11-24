@@ -17,6 +17,7 @@ void earth();
 void mars();
 
 float time = 0;
+float speed = 0;
 bool rotate = 1;
 
 void init_openGL() 
@@ -126,7 +127,7 @@ void idle()
 {
 	if(rotate == 1)
 	{
-		time += 0.3;
+		time += speed;
 		if(time > 360)
 			time = 0;
 	}
@@ -136,6 +137,7 @@ void idle()
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
+	speed = atof(argv[1]);
 	glutInitWindowSize(600, 600);
 	glutCreateWindow("A4.3 - Planeten");
 	glutDisplayFunc(display);
