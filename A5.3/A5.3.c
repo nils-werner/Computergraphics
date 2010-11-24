@@ -129,7 +129,7 @@ void idle()
 	if(rotate == 1)
 	{
 		time += speed;
-		if(time > 360)
+		if(time > 360*2) // mars bewegt sich halb so schnell wie $time
 			time = 0;
 	}
 	glutPostRedisplay();
