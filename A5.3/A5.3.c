@@ -16,6 +16,9 @@ void moon();
 void earth();
 void mars();
 
+float time = 0;
+bool rotate = 0;
+
 void init_openGL() 
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -70,7 +73,8 @@ void sun()
 void earth() 
 {
 	glPushMatrix();
-	glRotatef(45.0, 0.0, 0.0, 1.0);
+	//glRotatef(45.0, 0.0, 0.0, 1.0);
+	glRotatef(time, 0.0, 0.0, 1.0);
 	glTranslatef(1.8, 0.0, 0.0); // temporäre werte
 	glColor3f(0.0, 0.0, 1.0);
 	glutSolidSphere(0.3, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
@@ -85,7 +89,8 @@ void earth()
 void moon() 
 {
 	glPushMatrix();
-	glRotatef(-45.0, 0.0, 0.0, 1.0);
+	//glRotatef(-45.0, 0.0, 0.0, 1.0);
+	glRotatef(time, 0.0, 0.0, 1.0);
 	glTranslatef(0.6, 0.0, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
 	glutSolidSphere(0.1, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
@@ -97,7 +102,8 @@ void moon()
 void mars() 
 {
 	glPushMatrix();
-	glRotatef(-30.0, 0.0, 0.0, 1.0);
+	//glRotatef(-30.0, 0.0, 0.0, 1.0);
+	glRotatef(time, 0.0, 0.0, 1.0);
 	glTranslatef(3.0, 0.0, 0.0); // temporäre werte
 	glColor3f(1.0, 0.0, 0.0);
 	glutSolidSphere(0.2, SPHERE_SEGMENTS, SPHERE_SEGMENTS);
@@ -116,12 +122,23 @@ void display()
 	glFlush();
 }
 
+void idle()
+{
+	if(rotate == 1)
+	{
+		time += 0.1;
+		if(time > 360)
+			time = 0;
+	}
+}
+
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitWindowSize(600, 600);
 	glutCreateWindow("A4.3 - Planeten");
 	glutDisplayFunc(display);
+	glutIdleFunc(idle);
 
 	init_openGL();
 
