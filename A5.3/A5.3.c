@@ -8,6 +8,7 @@ Felix Gundlack - 21309819
 
 #include <GL/glut.h>
 #include <math.h>
+#include <stdio.h>
 
 #define PI 3.1415926
 #define SPHERE_SEGMENTS 35
@@ -136,6 +137,11 @@ void idle()
 
 int main(int argc, char **argv)
 {
+	if(argc < 2)
+	{
+		printf("Usage: %s <speed>\n", argv[0]);
+		return 1;
+	}
 	glutInit(&argc, argv);
 	speed = atof(argv[1]);
 	glutInitWindowSize(600, 600);
