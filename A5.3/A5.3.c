@@ -17,7 +17,7 @@ void earth();
 void mars();
 
 float time = 0;
-bool rotate = 0;
+bool rotate = 1;
 
 void init_openGL() 
 {
@@ -130,6 +130,7 @@ void idle()
 		if(time > 360)
 			time = 0;
 	}
+	glutPostRedisplay();
 }
 
 int main(int argc, char **argv)
