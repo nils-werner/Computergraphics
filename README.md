@@ -1,4 +1,4 @@
-Computergrafik Programmieraufgaben 2010
+# Computergrafik Programmieraufgaben 2010
 
 Volker Breuer - 21263916   
 Nils Werner - 21202217   
