@@ -146,7 +146,7 @@ void idle()
 	if(rotate == 1)
 	{
 		time += speed;
-		if(time > 360*2) // mars bewegt sich halb so schnell wie $time
+		if(fabs(time) > 360*20) // die langsamste geschwindigkeit eines planeten ist 1/20*time
 			time = 0;
 	}
 
@@ -168,6 +168,12 @@ void keyboard(unsigned char key, int x, int y)
 		case 'O':
 			orbits = !orbits;
 			break;
+		case '+':
+			speed++;
+			break;
+		case '-':
+			speed--;
+			break;
 		case 'q':
 		case 'Q':
 			exit(0);
@@ -179,6 +185,12 @@ int main(int argc, char **argv)
 	if(argc < 2)
 	{
 		printf("Usage: %s <speed>\n", argv[0]);
+		printf("Hotkeys available:\n");
+		printf("  r       start rotation\n");
+		printf("  c       toggle circles/squares\n");
+		printf("  o       hide orbits\n");
+		printf("  +/-     increase/decrease speed\n");
+		printf("  q       quit\n");
 		return 1;
 	}
 	glutInit(&argc, argv);
