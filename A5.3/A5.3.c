@@ -134,7 +134,8 @@ void display()
 
 	sun();
 
-	glFlush();
+	//glFlush();
+	glutSwapBuffers();
 }
 
 void idle()
@@ -158,6 +159,8 @@ void keyboard(unsigned char key, int x, int y)
 		case 'r':
 			rotate = !rotate;
 			break;
+		case 'q':
+			exit(0);
 	}
 }
 
@@ -172,6 +175,7 @@ int main(int argc, char **argv)
 	speed = atof(argv[1]);
 	glutInitWindowSize(600, 600);
 	glutCreateWindow("A4.3 - Planeten");
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutKeyboardFunc(keyboard);
