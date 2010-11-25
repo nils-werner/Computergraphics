@@ -21,6 +21,7 @@ float time = 0;
 float speed = 0;
 bool rotate = 0;
 bool circles = 1;
+bool orbits = 1;
 
 void init_openGL() 
 {
@@ -38,6 +39,8 @@ void init_openGL()
 
 void orbit(float radius, float center_x, float center_y) 
 {
+	if(orbits == 0)
+		return;
 	float phi_step = (float) (2 * PI / SPHERE_SEGMENTS);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -154,12 +157,19 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch(key) {
 		case 'c':
+		case 'C':
 			circles = !circles;
 			break;
 		case 'r':
+		case 'R':
 			rotate = !rotate;
 			break;
+		case 'o':
+		case 'O':
+			orbits = !orbits;
+			break;
 		case 'q':
+		case 'Q':
 			exit(0);
 	}
 }
