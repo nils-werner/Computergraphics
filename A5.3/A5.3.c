@@ -19,8 +19,8 @@ void mars();
 
 float time = 0;
 float speed = 0;
-bool rotate = 1;
-bool circles = 0;
+bool rotate = 0;
+bool circles = 1;
 
 void init_openGL() 
 {
@@ -149,6 +149,18 @@ void idle()
 	glutPostRedisplay();
 }
 
+void keyboard(unsigned char key, int x, int y)
+{
+	switch(key) {
+		case 'c':
+			circles = !circles;
+			break;
+		case 'r':
+			rotate = !rotate;
+			break;
+	}
+}
+
 int main(int argc, char **argv)
 {
 	if(argc < 2)
@@ -162,6 +174,7 @@ int main(int argc, char **argv)
 	glutCreateWindow("A4.3 - Planeten");
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
+	glutKeyboardFunc(keyboard);
 
 	init_openGL();
 
