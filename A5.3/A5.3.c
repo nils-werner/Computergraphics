@@ -9,6 +9,7 @@ Felix Gundlack - 21309819
 #include <GL/glut.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define PI 3.1415926
 #define SPHERE_SEGMENTS 35
