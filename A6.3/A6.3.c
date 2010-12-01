@@ -181,6 +181,10 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
+void mouse(int button, int state, int x, int y)
+{
+}
+
 int main(int argc, char **argv)
 {
 	if(argc < 2)
@@ -202,6 +206,7 @@ int main(int argc, char **argv)
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
 
 	init_openGL();
 
