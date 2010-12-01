@@ -154,6 +154,16 @@ void idle()
 	glutPostRedisplay();
 }
 
+void reshape(int w, int h)
+{
+        glViewport(0,0,(GLsizei) w, (GLsizei) h);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective(70.0, (GLfloat) w/ (GLfloat) h, 0.1, 20.0);
+        glMatrixMode(GL_MODELVIEW);
+}
+
+
 void keyboard(unsigned char key, int x, int y)
 {
 	switch(key) {
@@ -209,6 +219,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
+	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
         glutMotionFunc(mousemove);
         glutMouseFunc(mouseclick);
