@@ -181,7 +181,11 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
-void mouse(int button, int state, int x, int y)
+void mouseclick(int button, int state, int x, int y)
+{
+}
+
+void mousemove(int x, int y)
 {
 }
 
@@ -206,7 +210,8 @@ int main(int argc, char **argv)
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutKeyboardFunc(keyboard);
-	glutMouseFunc(mouse);
+        glutMotionFunc(mousemove);
+        glutMouseFunc(mouseclick);
 
 	init_openGL();
 
