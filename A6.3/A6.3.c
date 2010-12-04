@@ -218,6 +218,8 @@ void keyboard(unsigned char key, int x, int y)
 
 void mouseclick(int button, int state, int x, int y)
 {
+	last_x = x;
+	last_y = y;
 }
 
 void mousemove(int x, int y)
