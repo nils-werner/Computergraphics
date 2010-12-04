@@ -21,7 +21,7 @@ void mars();
 
 float time = 0;
 float speed = 0;
-float distance, azim_angle, inc_angle, twist = 0;
+vec3 eye, at;
 float last_x, last_y;
 bool rotate = 0;
 bool circles = 1;
@@ -29,6 +29,8 @@ bool orbits = 1;
 
 void init_openGL() 
 {
+	eye.z = 20.0;
+	at.z = -1.0;
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	glMatrixMode(GL_PROJECTION);
@@ -38,7 +40,7 @@ void init_openGL()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 20.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	//gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
 }
 
 void orbit(float radius, float center_x, float center_y) 
@@ -134,21 +136,13 @@ void mars()
 	orbit(3.0, 0.0, 0.0);
 }
 
-void manipulate_view(float distance, float azimuth, float incidence, float twist)
-{
-    glTranslatef( 0.0, 0.0, -distance);
-    glRotatef( -twist, 0.0, 0.0, 1.0);
-    glRotatef( -incidence, 1.0, 0.0, 0.0);
-    glRotatef( -azimuth, 0.0, 0.0, 1.0);
-}
-
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
 	glPushMatrix();	
-	manipulate_view(distance, azim_angle, inc_angle, twist);
+	gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
 
 	sun();
 
@@ -182,6 +176,8 @@ void reshape(int w, int h)
 
 void keyboard(unsigned char key, int x, int y)
 {
+	vec3 look = (at-eye) * 0.01;
+	
 	switch(key) {
 		case 'c':
 		case 'C':
@@ -203,19 +199,21 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'w':
 		case 'W':
-			distance -= 0.2;
+			at = at + look;
+			eye = eye + look;
 			break;
 		case 's':
 		case 'S':
-			distance += 0.2;
+			at = at - look;
+			eye = eye - look;
 			break;
 		case 'q':
 		case 'Q':
-			twist += 0.4;
+			
 			break;
 		case 'e':
 		case 'E':
-			twist -= 0.4;
+			
 			break;
 		case 27:
 			exit(0);
@@ -230,9 +228,9 @@ void mouseclick(int button, int state, int x, int y)
 
 void mousemove(int x, int y)
 {
-	azim_angle += (x - last_x);
-	inc_angle -= (y-last_y);
-	
+	//rotMat3x3 matrix = rotMat3x3
+	at = eye + rotMat3x3(vec3(0.0, 1.0, 0.0), (last_x - x)/5) * (at-eye); // x-axis
+	at = eye + rotMat3x3(vec3(1.0, 0.0, 0.0), (last_y - y)/5) * (at-eye); // y-axis
 	last_x = x;
 	last_y = y;
 }
