@@ -202,14 +202,19 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'w':
 		case 'W':
-			distance -= 0.1;
+			distance -= 0.2;
+			break;
+		case 's':
+		case 'S':
+			distance += 0.2;
+			break;
 		case 'q':
 		case 'Q':
-			twist += 0.1;
+			twist += 0.4;
 			break;
 		case 'e':
 		case 'E':
-			twist -= 0.1;
+			twist -= 0.4;
 			break;
 		case 27:
 			exit(0);
