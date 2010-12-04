@@ -21,7 +21,7 @@ void mars();
 
 float time = 0;
 float speed = 0;
-vec3 eye, at;
+vec3 eye, at, up;
 float last_x, last_y;
 bool rotate = 0;
 bool circles = 1;
@@ -31,6 +31,7 @@ void init_openGL()
 {
 	eye.z = 20.0;
 	at.z = -1.0;
+	up.y = 1.0,
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	glMatrixMode(GL_PROJECTION);
@@ -142,7 +143,7 @@ void display()
 	glEnable(GL_DEPTH_TEST);
 
 	glPushMatrix();	
-	gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
+	gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
 
 	sun();
 
