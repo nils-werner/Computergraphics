@@ -31,7 +31,7 @@ void init_openGL()
 {
 	eye.z = 20.0;
 	at.z = -1.0;
-	up.y = 1.0,
+	up.x = 1.0,
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	glMatrixMode(GL_PROJECTION);
@@ -205,12 +205,10 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'w':
 		case 'W':
-			at = at + look;
 			eye = eye + look;
 			break;
 		case 's':
 		case 'S':
-			at = at - look;
 			eye = eye - look;
 			break;
 		case 'q':
