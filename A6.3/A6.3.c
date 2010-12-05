@@ -44,6 +44,11 @@ void init_openGL()
 	//gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
 }
 
+vec3 kreuzprod(vec3 a, vec3 b) {
+	return vec3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+}
+
+
 void orbit(float radius, float center_x, float center_y) 
 {
 	if(orbits == 0)
@@ -210,11 +215,11 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'q':
 		case 'Q':
-			
+			up = rotMat3x3(at, 0.5) * up;
 			break;
 		case 'e':
 		case 'E':
-			
+			up = rotMat3x3(at, -0.5) * up;
 			break;
 		case 27:
 			exit(0);
@@ -229,9 +234,19 @@ void mouseclick(int button, int state, int x, int y)
 
 void mousemove(int x, int y)
 {
-	//rotMat3x3 matrix = rotMat3x3
-	at = eye + rotMat3x3(vec3(0.0, 1.0, 0.0), (last_x - x)/5) * (at-eye); // x-axis
-	at = eye + rotMat3x3(vec3(1.0, 0.0, 0.0), (last_y - y)/5) * (at-eye); // y-axis
+	/*
+	Kamera wird für x-Bewegungen um Up-Vektor und y-Bewegungen um Rechts-Vektor rotiert
+	Rechts-Vektor wird aus Lookat- und Up-Vektoren erzeugt.
+	Up-Vektor wird bei y-Bewegungen auch rotiert, um anschließend wieder als Rotationsachse dienen zu koennen
+	*/
+	
+	
+	vec3 right = kreuzprod(at, up);  // Vektor der Kamera, der nach rechts zeigt
+	
+	at = eye + rotMat3x3(up, (last_x - x)/15) * (at-eye); // X-Achse, rotiert um up
+	at = eye + rotMat3x3(right, (last_y - y)/15) * (at-eye); // y-Achse, rotiert um right
+	
+	up = rotMat3x3(right, (last_y - y)/15) * up; // Up-Vektor wird als Rotationsachse verwendet, muss also auch rotiert werden
 	last_x = x;
 	last_y = y;
 }
@@ -265,4 +280,3 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 }
-
