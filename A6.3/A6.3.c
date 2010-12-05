@@ -246,6 +246,8 @@ void mousemove(int x, int y)
 	Kamera wird für x-Bewegungen um Up-Vektor und y-Bewegungen um Rechts-Vektor rotiert
 	Rechts-Vektor wird aus Lookat- und Up-Vektoren erzeugt.
 	Up-Vektor wird bei y-Bewegungen auch rotiert, um anschließend wieder als Rotationsachse dienen zu koennen
+	
+	x-Achse ist mit absicht umgekehrt, ist beim Flugzeug-Steuerknüppel genauso!
 	*/
 	
 	
