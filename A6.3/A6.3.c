@@ -223,11 +223,11 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'q':
 		case 'Q':
-			up = rotMat3x3(at, 0.5) * up;
+			up = rotMat3x3(at-eye, -3) * up;
 			break;
 		case 'e':
 		case 'E':
-			up = rotMat3x3(at, -0.5) * up;
+			up = rotMat3x3(at-eye, 3) * up;
 			break;
 		case 27:
 			exit(0);
