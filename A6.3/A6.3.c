@@ -252,9 +252,9 @@ void mousemove(int x, int y)
 	vec3 right = kreuzprod(at-eye, up);  // Vektor der Kamera, der nach rechts zeigt
 	
 	at = eye + rotMat3x3(up, (last_x - x)/15) * (at-eye); // X-Achse, rotiert um up
-	at = eye + rotMat3x3(right, (last_y - y)/15) * (at-eye); // y-Achse, rotiert um right
+	at = eye + rotMat3x3(right, (y - last_y)/15) * (at-eye); // y-Achse, rotiert um right
 	
-	up = rotMat3x3(right, (last_y - y)/15) * up; // Up-Vektor wird als Rotationsachse verwendet, muss also auch rotiert werden
+	up = rotMat3x3(right, (y - last_y)/15) * up; // Up-Vektor wird als Rotationsachse verwendet, muss also auch rotiert werden
 	last_x = x;
 	last_y = y;
 }
