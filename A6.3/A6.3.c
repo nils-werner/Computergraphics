@@ -36,8 +36,8 @@ void init_openGL()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-//	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
-	glOrtho(-5.0, 5.0, -5.0, 5.0, 0.01, 50.0);	
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
+//	glOrtho(-5.0, 5.0, -5.0, 5.0, 0.01, 50.0);	
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
