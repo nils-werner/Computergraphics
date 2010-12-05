@@ -188,7 +188,7 @@ void reshape(int w, int h)
 
 void keyboard(unsigned char key, int x, int y)
 {
-	//vec3 look = (at-eye) * 0.01;
+	vec3 look = (at-eye) * 0.1;
 	
 	switch(key) {
 		case 'c':
@@ -211,13 +211,15 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'w':
 		case 'W':
-			//eye = eye + look;
-			eye_speed += 0.01;
+			eye = eye + look;
+			at = at + look;
+			//eye_speed += 0.01;
 			break;
 		case 's':
 		case 'S':
-			//eye = eye - look;
-			eye_speed -= 0.01;
+			eye = eye - look;
+			at = at - look;
+			//eye_speed -= 0.01;
 			break;
 		case 'q':
 		case 'Q':
