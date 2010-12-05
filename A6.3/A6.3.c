@@ -23,6 +23,7 @@ float time = 0;
 float speed = 0;
 vec3 eye, at, up;
 float last_x, last_y;
+float eye_speed=0.0;
 bool rotate = 0;
 bool circles = 1;
 bool orbits = 1;
@@ -30,13 +31,13 @@ bool orbits = 1;
 void init_openGL() 
 {
 	eye.z = 20.0;
-	at.z = -1.0;
+	at.z = 19.0;
 	up.x = 1.0,
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 50.0);
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 500.0);
 //	glOrtho(-5.0, 5.0, -5.0, 5.0, 0.01, 50.0);	
 
 	glMatrixMode(GL_MODELVIEW);
@@ -159,12 +160,17 @@ void display()
 
 void idle()
 {
+	vec3 tmp_eye = eye;
 	if(rotate == 1)
 	{
 		time += speed;
 		if(fabs(time) > 360*20) // die langsamste geschwindigkeit eines planeten ist 1/20*time
 			time = 0;
 	}
+	
+	
+	eye = tmp_eye + ((at-tmp_eye)*eye_speed);
+	at = at + ((at-tmp_eye)*eye_speed);
 
 	glutPostRedisplay();
 }
@@ -182,7 +188,7 @@ void reshape(int w, int h)
 
 void keyboard(unsigned char key, int x, int y)
 {
-	vec3 look = (at-eye) * 0.01;
+	//vec3 look = (at-eye) * 0.01;
 	
 	switch(key) {
 		case 'c':
@@ -205,11 +211,13 @@ void keyboard(unsigned char key, int x, int y)
 			break;
 		case 'w':
 		case 'W':
-			eye = eye + look;
+			//eye = eye + look;
+			eye_speed += 0.01;
 			break;
 		case 's':
 		case 'S':
-			eye = eye - look;
+			//eye = eye - look;
+			eye_speed -= 0.01;
 			break;
 		case 'q':
 		case 'Q':
@@ -239,7 +247,7 @@ void mousemove(int x, int y)
 	*/
 	
 	
-	vec3 right = kreuzprod(at, up);  // Vektor der Kamera, der nach rechts zeigt
+	vec3 right = kreuzprod(at-eye, up);  // Vektor der Kamera, der nach rechts zeigt
 	
 	at = eye + rotMat3x3(up, (last_x - x)/15) * (at-eye); // X-Achse, rotiert um up
 	at = eye + rotMat3x3(right, (last_y - y)/15) * (at-eye); // y-Achse, rotiert um right
