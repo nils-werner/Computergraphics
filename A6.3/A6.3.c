@@ -277,12 +277,22 @@ int main(int argc, char **argv)
 	if(argc < 2)
 	{
 		printf("Usage: %s <speed>\n", argv[0]);
-		printf("Hotkeys available:\n");
-		printf("  r       start rotation\n");
+		printf("\nHotkeys available:");
+		
+		printf("\n  Solar system controls\n");
+		printf("  r       start/stop rotation\n");
 		printf("  c       toggle circles/squares\n");
-		printf("  o       hide orbits\n");
-		printf("  +/-     increase/decrease speed\n");
-		printf("  q       quit\n");
+		printf("  o       show/hide orbit-polygons\n");
+		printf("  +/-     increase/decrease orbital speed\n");
+		
+		printf("\n  Camera Movements\n");
+		printf("  w/s     move camera forward/backwards\n");
+		printf("  a/d     strafe camera left/right\n");
+		printf("  l_mouse use mouse for camera orientation\n");
+		printf("  q/e     tilt camera left/right\n");
+		
+		printf("\n  Other\n");
+		printf("  esq     quit\n");
 		return 1;
 	}
 	glutInit(&argc, argv);
