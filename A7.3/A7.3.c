@@ -43,6 +43,8 @@ void init_openGL()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
+	
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, 0);
 }
 
 vec3 kreuzprod(vec3 a, vec3 b) {
