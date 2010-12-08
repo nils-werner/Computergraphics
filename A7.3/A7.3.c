@@ -44,7 +44,9 @@ void init_openGL()
 	glLoadIdentity();
 	//gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
 	
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, 0);
+	GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 0.0};
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
+	glEnable(GL_LIGHTING);
 }
 
 vec3 kreuzprod(vec3 a, vec3 b) {
