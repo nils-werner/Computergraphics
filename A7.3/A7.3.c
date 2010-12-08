@@ -27,13 +27,14 @@ float eye_speed=0.0;
 bool rotate = 0;
 bool circles = 1;
 bool orbits = 1;
+GLfloat zeroes[] = { 0.0, 0.0, 0.0, 1.0 };
 
 void init_openGL() 
 {
 	eye.z = 20.0;
 	at.z = 19.0;
 	up.x = 1.0,
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(0.1, 0.1, 0.1, 0.0);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -47,6 +48,10 @@ void init_openGL()
 	GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 0.0};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
+	
+	glColorMaterial ( GL_FRONT, GL_DIFFUSE ) ;
+
 }
 
 vec3 kreuzprod(vec3 a, vec3 b) {
@@ -56,8 +61,13 @@ vec3 kreuzprod(vec3 a, vec3 b) {
 
 void orbit(float radius, float center_x, float center_y) 
 {
+
 	if(orbits == 0)
 		return;
+		
+	GLfloat white[] = {1.0, 1.0, 1.0, 1.0};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
+
 	float phi_step = (float) (2 * PI / SPHERE_SEGMENTS);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -81,6 +91,8 @@ void orbit(float radius, float center_x, float center_y)
 		glVertex3f(radius, 0.0, 0.0);
 	}
 	glEnd();
+	
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, zeroes); // disable emission for everybody else
 	glPopMatrix();
 }
 
@@ -98,8 +110,23 @@ void planet(float radius)
 
 void sun() 
 {
-	glColor3f(1.0, 1.0, 0.0);
+	GLfloat light_position[] = {0.0, 0.0, 0.0, 1.0};
+	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
+	GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+	
+	glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	
+	glEnable(GL_LIGHT0);
+	
+	GLfloat yellow[] = {1.0, 1.0, 0.0, 1.0};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
+	
 	planet(0.8);
+	
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, zeroes); // disable emission for everybody else
+
 
 	earth();
 	mars();
