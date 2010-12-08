@@ -34,7 +34,7 @@ void init_openGL()
 	eye.z = 20.0;
 	at.z = 19.0;
 	up.x = 1.0,
-	glClearColor(0.1, 0.1, 0.1, 0.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -50,7 +50,10 @@ void init_openGL()
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 	
-	glColorMaterial ( GL_FRONT, GL_DIFFUSE ) ;
+	glColorMaterial (GL_FRONT, GL_DIFFUSE);
+	
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 
 }
 
@@ -65,7 +68,7 @@ void orbit(float radius, float center_x, float center_y)
 	if(orbits == 0)
 		return;
 		
-	GLfloat white[] = {1.0, 1.0, 1.0, 1.0};
+	GLfloat white[] = {.3, .3, .3, 1.0};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
 
 	float phi_step = (float) (2 * PI / SPHERE_SEGMENTS);
@@ -108,17 +111,31 @@ void planet(float radius)
 	}
 }
 
+void alpha_proxima()
+{
+	GLfloat light_position[] = {0.0, 0.0, 0.0, 1.0}; // irgendwie muss die Lichtquelle noch verschoben werden und sich nicht mit der Kamera bewegen
+	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
+	GLfloat light_diffuse[] = {0.4, 0.4, 0.4, 1.0};
+	
+	glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 500.0); // temporäre werte
+	glPopMatrix();
+
+}
+
 void sun() 
 {
 	GLfloat light_position[] = {0.0, 0.0, 0.0, 1.0};
 	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
 	GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
 	
-	glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	
-	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT1, GL_AMBIENT,  light_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE,  light_diffuse);
+	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
 	
 	GLfloat yellow[] = {1.0, 1.0, 0.0, 1.0};
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
@@ -183,6 +200,7 @@ void display()
 	gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, up.x, up.y, up.z);
 
 	sun();
+	alpha_proxima();
 
 	//glFlush();
 	glPopMatrix();
@@ -223,6 +241,18 @@ void keyboard(unsigned char key, int x, int y)
 	vec3 right = kreuzprod(at-eye, up) * 0.05;
 	
 	switch(key) {
+		case '1':
+			if(glIsEnabled(GL_LIGHT1))
+				glDisable(GL_LIGHT1);
+			else
+				glEnable(GL_LIGHT1);
+			break;
+		case '2':
+			if(glIsEnabled(GL_LIGHT0))
+				glDisable(GL_LIGHT0);
+			else
+				glEnable(GL_LIGHT0);
+			break;
 		case 'c':
 		case 'C':
 			circles = !circles;
