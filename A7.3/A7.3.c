@@ -113,7 +113,7 @@ void planet(float radius)
 
 void alpha_proxima()
 {
-	GLfloat light_position[] = {0.0, 0.0, 0.0, 1.0}; // irgendwie muss die Lichtquelle noch verschoben werden und sich nicht mit der Kamera bewegen
+	GLfloat light_position[] = {0.0, 0.0, 500.0, 1.0}; // irgendwie muss die Lichtquelle noch verschoben werden und sich nicht mit der Kamera bewegen
 	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
 	GLfloat light_diffuse[] = {0.4, 0.4, 0.4, 1.0};
 	
@@ -122,7 +122,7 @@ void alpha_proxima()
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	
 	glPushMatrix();
-	glTranslatef(0.0, 0.0, 500.0); // temporäre werte
+	glTranslatef(0.0, 0.0, 0.0); // temporäre werte
 	glPopMatrix();
 
 }
@@ -138,7 +138,10 @@ void sun()
 	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
 	
 	GLfloat yellow[] = {1.0, 1.0, 0.0, 1.0};
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
+	if(glIsEnabled(GL_LIGHT1))
+		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
+		
+	glColor3f(1.0, 1.0, 0.0);
 	
 	planet(0.8);
 	
