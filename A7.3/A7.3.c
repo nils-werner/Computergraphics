@@ -69,7 +69,8 @@ void orbit(float radius, float center_x, float center_y)
 		return;
 		
 	GLfloat white[] = {.3, .3, .3, 1.0};
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
+	if(glIsEnabled(GL_LIGHT1) || glIsEnabled(GL_LIGHT0)) // übergangslösung um Orbite ohne Licht zu verstecken
+		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
 
 	float phi_step = (float) (2 * PI / SPHERE_SEGMENTS);
 
