@@ -43,7 +43,7 @@ void init_openGL()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-//  gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
+//	gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
 	
 	/*deactivate default ambient lightning*/
 	GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 0.0};
@@ -119,7 +119,7 @@ void alpha_proxima()
 	GLfloat light_position[] = {0.0, 0.0, 500.0, 1.0}; // irgendwie muss die Lichtquelle noch verschoben werden und sich nicht mit der Kamera bewegen
 	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
 	GLfloat light_diffuse[] = {0.4, 0.4, 0.4, 1.0};
-	GLfloat light_spot_direction[] = {0.0, 0.0, 0.0, 1.0};
+	GLfloat light_spot_direction[] = {0.0, 0.0, -1.0};
 	GLfloat light_spot_cutoff = 45.0;
 	
 	glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
