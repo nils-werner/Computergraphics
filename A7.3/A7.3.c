@@ -43,7 +43,7 @@ void init_openGL()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
+//  gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
 	
 	GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 0.0};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
@@ -57,7 +57,7 @@ void init_openGL()
 
 }
 
-vec3 kreuzprod(vec3 a, vec3 b) {
+vec3 calcCrossProduct(vec3 a, vec3 b) {
 	return vec3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
 }
 
@@ -130,24 +130,28 @@ void alpha_proxima()
 
 void sun() 
 {
+
+	/*setup lightsource 1 at the center of the world*/
 	GLfloat light_position[] = {0.0, 0.0, 0.0, 1.0};
-	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
-	GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};			//"[...]keine ambient Komponente[...]"
+	GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};			//"[...]kräftige Diffuse- und"
+	GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};		//"Specular Komponenten besitzen."
 	
 	glLightfv(GL_LIGHT1, GL_AMBIENT,  light_ambient);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE,  light_diffuse);
 	glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
 	
+	/*setup material specification of the sun*/
 	GLfloat yellow[] = {1.0, 1.0, 0.0, 1.0};
-	if(glIsEnabled(GL_LIGHT1))
+	if(glIsEnabled(GL_LIGHT1)) {
 		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
-		
-	glColor3f(1.0, 1.0, 0.0);
-	
-	planet(0.8);
-	
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, zeroes); // disable emission for everybody else
+	}
 
+	/*setup sphere representing the sun*/
+	glColor3f(1.0, 1.0, 0.0);
+	planet(0.8);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, zeroes); // disable emission for everybody else
 
 	earth();
 	mars();
@@ -242,7 +246,7 @@ void reshape(int w, int h)
 void keyboard(unsigned char key, int x, int y)
 {
 	vec3 look = (at-eye) * 0.1;
-	vec3 right = kreuzprod(at-eye, up) * 0.05;
+	vec3 right = calcCrossProduct(at-eye, up) * 0.05;
 	
 	switch(key) {
 		case '1':
@@ -324,10 +328,9 @@ void mousemove(int x, int y)
 	Up-Vektor wird bei y-Bewegungen auch rotiert, um anschließend wieder als Rotationsachse dienen zu koennen
 	
 	x-Achse ist mit absicht umgekehrt, ist beim Flugzeug-Steuerknüppel genauso!
-	*/
+	*/	
 	
-	
-	vec3 right = kreuzprod(at-eye, up);  // Vektor der Kamera, der nach rechts zeigt
+	vec3 right = calcCrossProduct(at-eye, up);  // Vektor der Kamera, der nach rechts zeigt
 	
 	at = eye + rotMat3x3(up, (last_x - x)/15) * (at-eye); // X-Achse, rotiert um up
 	at = eye + rotMat3x3(right, (y - last_y)/15) * (at-eye); // y-Achse, rotiert um right
@@ -356,21 +359,31 @@ int main(int argc, char **argv)
 		printf("  l_mouse use mouse for camera orientation\n");
 		printf("  q/e     tilt camera left/right\n");
 		
+		printf("\n  Lightning\n");
+		printf("  1       light switch for the sun\n");
+		printf("  2       light switch for neighboring star\n");
+
 		printf("\n  Other\n");
 		printf("  esq     quit\n");
 		return 1;
 	}
-	glutInit(&argc, argv);
+
+	/*parse rotation speed*/
 	speed = atof(argv[1]);
+
+	/*initialize graphics library*/
+	glutInit(&argc, argv);
 	glutInitWindowSize(600, 600);
-	glutCreateWindow("A4.3 - Planeten");
+	glutCreateWindow("A7.3 - Planeten");
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
-	glutReshapeFunc(reshape);
+	glutReshapeFunc(reshape);	//handles window resizing
+
+	/*control settings*/
 	glutKeyboardFunc(keyboard);
-        glutMotionFunc(mousemove);
-        glutMouseFunc(mouseclick);
+    glutMotionFunc(mousemove);
+    glutMouseFunc(mouseclick);
 
 	init_openGL();
 
