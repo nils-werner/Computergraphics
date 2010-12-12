@@ -45,8 +45,10 @@ void init_openGL()
 	glLoadIdentity();
 //  gluLookAt(eye.x, eye.y, eye.z, at.x, at.y, at.z, 0.0, 1.0, 0.0);
 	
+	/*deactivate default ambient lightning*/
 	GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 0.0};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 	
@@ -117,11 +119,15 @@ void alpha_proxima()
 	GLfloat light_position[] = {0.0, 0.0, 500.0, 1.0}; // irgendwie muss die Lichtquelle noch verschoben werden und sich nicht mit der Kamera bewegen
 	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
 	GLfloat light_diffuse[] = {0.4, 0.4, 0.4, 1.0};
+	GLfloat light_spot_direction[] = {0.0, 0.0, 0.0, 1.0};
+	GLfloat light_spot_cutoff = 45.0;
 	
 	glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);	//"mittelstarke, diffuse Komponente"
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_spot_direction);	//"unidirektionales Licht"
+	glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF, &light_spot_cutoff);	
+
 	glPushMatrix();
 	glTranslatef(0.0, 0.0, 0.0); // temporäre werte
 	glPopMatrix();
