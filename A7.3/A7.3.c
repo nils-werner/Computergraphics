@@ -280,10 +280,10 @@ void keyboard(unsigned char key, int x, int y)
 			orbits = !orbits;
 			break;
 		case '+':
-			speed += 0.1;
+			speed += 0.01;
 			break;
 		case '-':
-			speed -= 0.1;
+			speed -= 0.01;
 			break;
 		case 'w':
 		case 'W':
