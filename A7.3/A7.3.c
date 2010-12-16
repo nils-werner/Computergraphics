@@ -378,10 +378,11 @@ int main(int argc, char **argv)
 	speed = atof(argv[1]);
 
 	/*initialize graphics library*/
+	
 	glutInit(&argc, argv);
 	glutInitWindowSize(600, 600);
-	glutCreateWindow("A7.3 - Planeten");
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+	glutCreateWindow("A7.3 - Planeten");
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);	//handles window resizing
