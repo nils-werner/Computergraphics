@@ -1,9 +1,11 @@
 CC = g++
 LFLAGS = -Wall
-TARGET = A7.3
+SOURCE = A9.3
+TARGET = runme
 
-runme: $(TARGET).c
-	$(CC)  $(LFLAGS) $(TARGET).c -o runme -lglut -lGLU
+
+$(TARGET): $(SOURCE).C offLoader.h helper.h
+	$(CC)  $(LFLAGS) $(SOURCE).C -o $(TARGET) -lglut -lGLU
 
 clean: 
 	rm ./$(TARGET)
