@@ -4,8 +4,8 @@ SOURCE = A9.3
 TARGET = runme
 
 
-$(TARGET): $(SOURCE).C offLoader.h helper.h
-	$(CC)  $(LFLAGS) $(SOURCE).C -o $(TARGET) -lglut -lGLU
+$(TARGET): $(SOURCE).c offLoader.h helper.h
+	$(CC)  $(LFLAGS) $(SOURCE).c -o $(TARGET) -lglut -lGLU
 
 clean: 
 	rm ./$(TARGET)
