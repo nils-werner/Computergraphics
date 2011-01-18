@@ -61,11 +61,6 @@ void init_openGL()
 
 }
 
-vec3 calcCrossProduct(vec3 a, vec3 b) {
-	return vec3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
-}
-
-
 void orbit(float radius, float center_x, float center_y) 
 {
 
@@ -254,7 +249,7 @@ void reshape(int w, int h)
 void keyboard(unsigned char key, int x, int y)
 {
 	vec3 look = (at-eye) * 0.1;
-	vec3 right = calcCrossProduct(at-eye, up) * 0.05;
+	vec3 right = (at-eye).cross(up) * 0.05;
 	
 	switch(key) {
 		case '1':
@@ -338,7 +333,7 @@ void mousemove(int x, int y)
 	x-Achse ist mit absicht umgekehrt, ist beim Flugzeug-Steuerknüppel genauso!
 	*/	
 	
-	vec3 right = calcCrossProduct(at-eye, up);  // Vektor der Kamera, der nach rechts zeigt
+	vec3 right = (at-eye).cross(up);  // Vektor der Kamera, der nach rechts zeigt
 	
 	at = eye + rotMat3x3(up, (last_x - x)/15) * (at-eye); // X-Achse, rotiert um up
 	at = eye + rotMat3x3(right, (y - last_y)/15) * (at-eye); // y-Achse, rotiert um right
