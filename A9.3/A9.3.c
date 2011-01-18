@@ -18,6 +18,7 @@ Felix Gundlack - 21309819
 void moon();
 void earth();
 void mars();
+void shuttle();
 
 float animtime = 0;
 float speed = 0;
@@ -29,7 +30,7 @@ bool circles = 1;
 bool orbits = 1;
 GLfloat zeroes[] = { 0.0, 0.0, 0.0, 1.0 };
 
-OffObject* shuttle;
+OffObject* shuttlemodel;
 
 void init_openGL() 
 {
@@ -158,6 +159,7 @@ void sun()
 
 	earth();
 	mars();
+	shuttle();
 }
 
 void earth() 
@@ -200,6 +202,11 @@ void mars()
 	glPopMatrix();
 
 	orbit(3.0, 0.0, 0.0);
+}
+
+void shuttle()
+{
+	orbit(3.9, 0.0, 0.0);
 }
 
 void display()
@@ -373,6 +380,8 @@ int main(int argc, char **argv)
 
 	/*parse rotation speed*/
 	speed = atof(argv[1]);
+	
+	shuttlemodel = new OffObject("shuttle.off");
 
 	/*initialize graphics library*/
 	glutInit(&argc, argv);
