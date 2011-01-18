@@ -10,7 +10,7 @@ Felix Gundlack - 21309819
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "helper.h"
+#include "offLoader.h"
 
 #define PI 3.1415926
 #define SPHERE_SEGMENTS 35
@@ -19,7 +19,7 @@ void moon();
 void earth();
 void mars();
 
-float time = 0;
+float animtime = 0;
 float speed = 0;
 vec3 eye, at, up;
 float last_x, last_y;
@@ -28,6 +28,8 @@ bool rotate = 0;
 bool circles = 1;
 bool orbits = 1;
 GLfloat zeroes[] = { 0.0, 0.0, 0.0, 1.0 };
+
+OffObject* shuttle;
 
 void init_openGL() 
 {
@@ -167,7 +169,7 @@ void earth()
 {
 	glPushMatrix();
 	//glRotatef(45.0, 0.0, 0.0, 1.0);
-	glRotatef(time, 0.0, 0.0, 1.0);
+	glRotatef(animtime, 0.0, 0.0, 1.0);
 	glTranslatef(1.8, 0.0, 0.0); // temporäre werte
 	glColor3f(0.0, 0.0, 1.0);
 	planet(0.3);
@@ -183,7 +185,7 @@ void moon()
 {
 	glPushMatrix();
 	//glRotatef(-45.0, 0.0, 0.0, 1.0);
-	glRotatef(2*time, 0.0, 0.0, 1.0);
+	glRotatef(2*animtime, 0.0, 0.0, 1.0);
 	glTranslatef(0.6, 0.0, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
 	planet(0.1);
@@ -196,7 +198,7 @@ void mars()
 {
 	glPushMatrix();
 	//glRotatef(-30.0, 0.0, 0.0, 1.0);
-	glRotatef(0.5*time, 0.0, 0.0, 1.0);
+	glRotatef(0.5*animtime, 0.0, 0.0, 1.0);
 	glTranslatef(3.0, 0.0, 0.0); // temporäre werte
 	glColor3f(1.0, 0.0, 0.0);
 	planet(0.2);
@@ -226,9 +228,9 @@ void idle()
 	vec3 tmp_eye = eye;
 	if(rotate == 1)
 	{
-		time += speed;
-		if(fabs(time) > 360*20) // die langsamste geschwindigkeit eines planeten ist 1/20*time
-			time = 0;
+		animtime += speed;
+		if(fabs(animtime) > 360*20) // die langsamste geschwindigkeit eines planeten ist 1/20*animtime
+			animtime = 0;
 	}
 	
 	
