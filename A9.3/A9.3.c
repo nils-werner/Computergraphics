@@ -31,6 +31,7 @@ bool orbits = 1;
 GLfloat zeroes[] = { 0.0, 0.0, 0.0, 1.0 };
 
 OffObject* shuttlemodel;
+GLuint list;
 
 void init_openGL() 
 {
@@ -60,6 +61,40 @@ void init_openGL()
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 
+
+	list = glGenLists(1);
+	glNewList(list, GL_COMPILE);
+	glBegin(GL_TRIANGLES);
+		for(unsigned int i=0; i<shuttlemodel->faceList.size();i++){
+			//Vertex 1
+			glNormal3f(shuttlemodel->normalsList[shuttlemodel->faceList[i].A].x,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].A].y,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].A].z);
+			
+			glVertex3f(shuttlemodel->vertexList[shuttlemodel->faceList[i].A].x,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].A].y,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].A].z);
+
+			//Vertex 2
+			glNormal3f(shuttlemodel->normalsList[shuttlemodel->faceList[i].B].x,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].B].y,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].B].z);
+			
+			glVertex3f(shuttlemodel->vertexList[shuttlemodel->faceList[i].B].x,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].B].y,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].B].z);
+
+			//Vertex 3
+			glNormal3f(shuttlemodel->normalsList[shuttlemodel->faceList[i].C].x,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].C].y,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].C].z);
+			
+			glVertex3f(shuttlemodel->vertexList[shuttlemodel->faceList[i].C].x,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].C].y,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].C].z);
+		}	
+		glEnd();
+	glEndList();
 }
 
 void orbit(float radius, float center_x, float center_y) 
@@ -206,6 +241,16 @@ void mars()
 
 void shuttle()
 {
+	glPushMatrix();
+	//glRotatef(45.0, 0.0, 0.0, 1.0);
+	glRotatef(animtime*0.25, 0.0, 0.0, 1.0);
+	glTranslatef(3.9, 0.0, 0.0); // temporäre werte
+	glColor3f(0.9, 0.9, 0.9);
+
+	glCallList(list); // shuttle malen
+		
+	glPopMatrix();
+
 	orbit(3.9, 0.0, 0.0);
 }
 
