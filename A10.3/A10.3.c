@@ -250,10 +250,13 @@ void sun()
 	if(glIsEnabled(GL_LIGHT1)) {
 		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow);
 	}
-
+	
+	glPushMatrix();
+	glRotatef(90.0, 0.0, 1.0, 0.0);
 	/*setup sphere representing the sun*/
 	glColor3f(1.0, 1.0, 0.0);
 	planet(0.8);
+	glPopMatrix();
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, zeroes); // disable emission for everybody else
 
     // Deactivate the shader again

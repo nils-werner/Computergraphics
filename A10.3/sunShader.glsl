@@ -5,7 +5,7 @@ float rand(vec2 co){
 }
 
 void main() {
-	float Rand = rand(vec2(gl_Vertex.y,gl_Vertex.x));
+	float Rand = rand(vec2(gl_Vertex.y,gl_Vertex.x+gl_Vertex.z));
 	float Rad = Time* Rand;
 	
 
