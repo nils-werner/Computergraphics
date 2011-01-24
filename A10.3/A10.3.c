@@ -14,7 +14,7 @@ Felix Gundlack - 21309819
 #include "offLoader.h"
 
 #define PI 3.1415926
-#define SPHERE_SEGMENTS 35
+#define SPHERE_SEGMENTS 100
 
 void moon();
 void earth();
