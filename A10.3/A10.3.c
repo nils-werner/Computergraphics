@@ -6,6 +6,7 @@ Nils Werner - 21202217
 Felix Gundlack - 21309819
 */
 
+#include <GL/glew.h>   /// SHADER-RELEVANT
 #include <GL/glut.h>
 #include <math.h>
 #include <stdio.h>
@@ -32,6 +33,60 @@ GLfloat zeroes[] = { 0.0, 0.0, 0.0, 1.0 };
 
 OffObject* shuttlemodel;
 GLuint list;
+
+GLuint sunShader;  /// SHADER-RELEVANT
+
+/// SHADER-RELEVANT -----begin------
+
+// this function creates a shader object by compiling and linking
+// the shader code in the file "VSfile".
+void createVertexProgram(const char*VSfile, GLuint *handle) {
+
+	GLint compiled;
+	char infoLog[4096];
+	int infoLogLength;
+
+	filebuf *pbuf;
+	ifstream filestr;
+	int size;
+	char *buffer;
+
+	filestr.open(VSfile);
+
+	// get pointer to associated buffer object
+	pbuf=filestr.rdbuf();
+	size=pbuf->pubseekoff (0,ios::end,ios::in);
+	pbuf->pubseekpos (0,ios::in);
+
+	// allocate memory to contain file data
+	buffer=new char[size];
+	pbuf->sgetn(buffer,size);
+
+	const char *VshaderCode = buffer;
+
+	filestr.close();
+
+	//compile vertex shader: 	
+	GLuint Vshader= glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(Vshader,1,&VshaderCode,&size);
+	glCompileShader(Vshader);
+	glGetShaderiv(Vshader,GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		// Print out the info log
+		glGetShaderInfoLog(Vshader, sizeof(infoLog), &infoLogLength, infoLog);
+		if(infoLogLength > 0) {
+			printf("CompileShader() infoLog  \n%s\n", infoLog);
+		}
+	}	
+
+	*handle = glCreateProgram();
+	glAttachShader(*handle, Vshader);
+
+	glDeleteShader(Vshader);
+	delete buffer;
+	glLinkProgram(sunShader);
+}
+ /// SHADER-RELEVANT---- end------ 
 
 void init_openGL() 
 {
@@ -95,6 +150,8 @@ void init_openGL()
 		}	
 		glEnd();
 	glEndList();
+	
+	createVertexProgram("sunShader.glsl",&sunShader);  /// SHADER-RELEVANT
 }
 
 void orbit(float radius, float center_x, float center_y) 
@@ -169,7 +226,14 @@ void alpha_proxima()
 
 void sun() 
 {
-
+    /// SHADER-RELEVANT ----begin---- 
+    // Activate the sun shader and provide the time-parameter. 
+    glUseProgram(sunShader);
+    GLint location;
+    location = glGetUniformLocation(sunShader, "Time");
+    glUniform1f(location, animtime); // change t to the name of your global time-parameter when you integrate the shader in your project.
+    ///SHADER-RELEVANT -----end------
+    
 	/*setup lightsource 1 at the center of the world*/
 	GLfloat light_position[] = {0.0, 0.0, 0.0, 1.0};
 	GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};			//"[...]keine ambient Komponente[...]"
@@ -191,6 +255,9 @@ void sun()
 	glColor3f(1.0, 1.0, 0.0);
 	planet(0.8);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, zeroes); // disable emission for everybody else
+
+    // Deactivate the shader again
+    glUseProgram(0);  /// SHADER-RELEVANT
 
 	earth();
 	mars();
@@ -365,6 +432,7 @@ void keyboard(unsigned char key, int x, int y)
 			up = rotMat3x3(at-eye, 3) * up;
 			break;
 		case 27:
+			glDeleteProgram(sunShader);  /// SHADER-RELEVANT 
 			exit(0);
 	}
 }
@@ -441,6 +509,11 @@ int main(int argc, char **argv)
 	glutKeyboardFunc(keyboard);
     glutMotionFunc(mousemove);
     glutMouseFunc(mouseclick);
+	
+	GLenum err = glewInit();
+	if (GLEW_OK != err) {
+		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+	}
 
 	init_openGL();
 
