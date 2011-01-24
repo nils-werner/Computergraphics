@@ -10,7 +10,7 @@ Felix Gundlack - 21309819
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "helper.h"
+#include "offLoader.h"
 
 #define PI 3.1415926
 #define SPHERE_SEGMENTS 35
@@ -18,8 +18,9 @@ Felix Gundlack - 21309819
 void moon();
 void earth();
 void mars();
+void shuttle();
 
-float time = 0;
+float animtime = 0;
 float speed = 0;
 vec3 eye, at, up;
 float last_x, last_y;
@@ -28,6 +29,9 @@ bool rotate = 0;
 bool circles = 1;
 bool orbits = 1;
 GLfloat zeroes[] = { 0.0, 0.0, 0.0, 1.0 };
+
+OffObject* shuttlemodel;
+GLuint list;
 
 void init_openGL() 
 {
@@ -57,12 +61,41 @@ void init_openGL()
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 
-}
 
-vec3 calcCrossProduct(vec3 a, vec3 b) {
-	return vec3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
-}
+	list = glGenLists(1);
+	glNewList(list, GL_COMPILE);
+	glBegin(GL_TRIANGLES);
+		for(unsigned int i=0; i<shuttlemodel->faceList.size();i++){
+			//Vertex 1
+			glNormal3f(shuttlemodel->normalsList[shuttlemodel->faceList[i].A].x,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].A].y,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].A].z);
+			
+			glVertex3f(shuttlemodel->vertexList[shuttlemodel->faceList[i].A].x,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].A].y,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].A].z);
 
+			//Vertex 2
+			glNormal3f(shuttlemodel->normalsList[shuttlemodel->faceList[i].B].x,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].B].y,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].B].z);
+			
+			glVertex3f(shuttlemodel->vertexList[shuttlemodel->faceList[i].B].x,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].B].y,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].B].z);
+
+			//Vertex 3
+			glNormal3f(shuttlemodel->normalsList[shuttlemodel->faceList[i].C].x,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].C].y,
+				   shuttlemodel->normalsList[shuttlemodel->faceList[i].C].z);
+			
+			glVertex3f(shuttlemodel->vertexList[shuttlemodel->faceList[i].C].x,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].C].y,
+				   shuttlemodel->vertexList[shuttlemodel->faceList[i].C].z);
+		}	
+		glEnd();
+	glEndList();
+}
 
 void orbit(float radius, float center_x, float center_y) 
 {
@@ -161,13 +194,14 @@ void sun()
 
 	earth();
 	mars();
+	shuttle();
 }
 
 void earth() 
 {
 	glPushMatrix();
 	//glRotatef(45.0, 0.0, 0.0, 1.0);
-	glRotatef(time, 0.0, 0.0, 1.0);
+	glRotatef(animtime, 0.0, 0.0, 1.0);
 	glTranslatef(1.8, 0.0, 0.0); // temporäre werte
 	glColor3f(0.0, 0.0, 1.0);
 	planet(0.3);
@@ -183,7 +217,7 @@ void moon()
 {
 	glPushMatrix();
 	//glRotatef(-45.0, 0.0, 0.0, 1.0);
-	glRotatef(2*time, 0.0, 0.0, 1.0);
+	glRotatef(2*animtime, 0.0, 0.0, 1.0);
 	glTranslatef(0.6, 0.0, 0.0); // temporäre werte
 	glColor3f(0.5, 0.5, 0.5);
 	planet(0.1);
@@ -196,13 +230,28 @@ void mars()
 {
 	glPushMatrix();
 	//glRotatef(-30.0, 0.0, 0.0, 1.0);
-	glRotatef(0.5*time, 0.0, 0.0, 1.0);
+	glRotatef(0.5*animtime, 0.0, 0.0, 1.0);
 	glTranslatef(3.0, 0.0, 0.0); // temporäre werte
 	glColor3f(1.0, 0.0, 0.0);
 	planet(0.2);
 	glPopMatrix();
 
 	orbit(3.0, 0.0, 0.0);
+}
+
+void shuttle()
+{
+	glPushMatrix();
+	//glRotatef(45.0, 0.0, 0.0, 1.0);
+	glRotatef(animtime*0.25, 0.0, 0.0, 1.0);
+	glTranslatef(3.9, 0.0, 0.0); // temporäre werte
+	glColor3f(0.9, 0.9, 0.9);
+
+	glCallList(list); // shuttle malen
+		
+	glPopMatrix();
+
+	orbit(3.9, 0.0, 0.0);
 }
 
 void display()
@@ -226,9 +275,9 @@ void idle()
 	vec3 tmp_eye = eye;
 	if(rotate == 1)
 	{
-		time += speed;
-		if(fabs(time) > 360*20) // die langsamste geschwindigkeit eines planeten ist 1/20*time
-			time = 0;
+		animtime += speed;
+		if(fabs(animtime) > 360*20) // die langsamste geschwindigkeit eines planeten ist 1/20*animtime
+			animtime = 0;
 	}
 	
 	
@@ -252,7 +301,7 @@ void reshape(int w, int h)
 void keyboard(unsigned char key, int x, int y)
 {
 	vec3 look = (at-eye) * 0.1;
-	vec3 right = calcCrossProduct(at-eye, up) * 0.05;
+	vec3 right = (at-eye).cross(up) * 0.05;
 	
 	switch(key) {
 		case '1':
@@ -336,7 +385,7 @@ void mousemove(int x, int y)
 	x-Achse ist mit absicht umgekehrt, ist beim Flugzeug-Steuerknüppel genauso!
 	*/	
 	
-	vec3 right = calcCrossProduct(at-eye, up);  // Vektor der Kamera, der nach rechts zeigt
+	vec3 right = (at-eye).cross(up);  // Vektor der Kamera, der nach rechts zeigt
 	
 	at = eye + rotMat3x3(up, (last_x - x)/15) * (at-eye); // X-Achse, rotiert um up
 	at = eye + rotMat3x3(right, (y - last_y)/15) * (at-eye); // y-Achse, rotiert um right
@@ -376,6 +425,8 @@ int main(int argc, char **argv)
 
 	/*parse rotation speed*/
 	speed = atof(argv[1]);
+	
+	shuttlemodel = new OffObject("shuttle.off");
 
 	/*initialize graphics library*/
 	glutInit(&argc, argv);

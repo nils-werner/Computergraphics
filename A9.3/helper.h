@@ -19,6 +19,19 @@ class vec3 {
 		y = 0.0;
 		z = 0.0;
 	}
+	
+	inline float length() {
+		return sqrt(x*x+y*y+z*z);
+	}	
+
+	inline void normalize() {
+
+		float l=this->length();
+
+		x /= l;
+		y /= l;
+		z /= l;
+	}
  
  	inline vec3 operator+(vec3 B) {
 	  
@@ -43,6 +56,15 @@ class vec3 {
 		C.y = a*y;
 		C.z = a*z;
 		return C;
+	}
+	
+	inline vec3 cross(vec3 B) {
+	  vec3 C;
+	  C.x = y*B.z - z*B.y;
+	  C.y = z*B.x - x*B.z;
+	  C.z = x*B.y - y*B.x;
+	  
+	  return C;
 	}
   
 };
